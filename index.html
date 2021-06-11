@@ -1,0 +1,89 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Cities: Skylines Map Helper </title>
+  <meta name="description" content="Cities: Skylines Map Helper">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <br>
+        <br>
+        <br>
+
+        <h3>This website is made to convert the latitude / longitude numbers provided by: <a href="https://cs.heightmap.skydark.pl/">https://cs.heightmap.skydark.pl/</a>  into 4 latitude / longitude numbers to be used in: <a href="www.openstreetmap.org">www.openstreetmap.org</a> with a download link to the .osm file</h3>
+
+        
+
+
+            <br>
+            <br>
+            <div class="form-group">
+              <label for="lat">Latitude</label>
+              <input type="text" class="form-control" id="lat" placeholder="Latitude">
+            </div>
+            <br>
+            <b></b>
+            <div class="form-group">
+              <label for="lng">Longitude</label>
+              <input type="text" class="form-control" id="lng" placeholder="Longitude">
+            </div>
+            <br>
+            <br>
+            <button id='getlink' onclick="getlink()" class="btn btn-primary">Get Download link</button>
+
+            <br>
+            <br>
+            <br>
+
+            <div> 
+                <h4 id='link'></h4>   
+                <br> 
+                <h4 id="nums"></h4>
+            </div>
+
+    </div>
+
+    <script>
+        function getlink(){
+
+            lat = document.getElementById("lat").value;
+            lng = document.getElementById("lng").value;
+
+            locations = get_lat_lng(parseFloat(lat), parseFloat(lng));
+
+            link = `https://overpass-api.de/api/map?bbox=${locations[3]},${locations[1]},${locations[2]},${locations[0]}`
+            document.getElementById("link").innerHTML = `<a href="${link}">${link}/</a>`
+            document.getElementById('nums').innerHTML = `For manual testing, numbers are: <br> Latitude: ${locations[0]} , ${locations[1]} and Longitude: ${locations[2]} , ${locations[3]}`
+        }
+
+        function get_lat_lng(lat, lng){
+            lat_km = 0.162163
+            lng_km = 18 / (Math.cos( lat * Math.PI / 180 ) * 111)
+            lat_up = lat + (lat_km / 2)
+            lat_down = lat - (lat_km / 2)
+            lng_up = lng + (lng_km / 2)
+            lng_down = lng - (lng_km / 2)
+            var arr = new Array();
+                arr[0] = lat_up.toFixed(4);
+                arr[1] = lat_down.toFixed(4);
+                arr[2] = lng_up.toFixed(4);
+                arr[3] = lng_down.toFixed(4);
+            console.log(arr);
+            return arr;
+        }
+
+    </script>
+   
+
+</body>
+</html>
